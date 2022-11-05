@@ -4,8 +4,7 @@
     "description": "",
     "main": "source/server.ts",
     "scripts": {
-        "build": "rm -rf build && tsc",
-        "dev": "nodemon source/server.ts "
+        "start": "nodemon source/server.ts "
     },
     "author": "",
     "license": "ISC",

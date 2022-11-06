@@ -3,7 +3,7 @@ import logging from '../config/logging';
 
 const NAMESPACE = 'Welcome Controller';
 const welcomeMessage = (req: Request, res: Response, next: NextFunction) => {
-    logging.info(NAMESPACE, 'Welcome route called');
+    logging.info(NAMESPACE, 'Main route called');
 
     return res.status(200).json({
         message: 'Hello World'

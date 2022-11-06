@@ -1,9 +1,10 @@
 import dotenv from 'dotenv';
 
 dotenv.config();
+const env = process.env;
 
-const SERVER_HOSTNAME = process.env.SERVER_HOSTNAME || 'localhost';
-const SERVER_PORT = process.env.SERVER_PORT || 1337;
+const SERVER_PORT = env.SERVER_PORT || 1337;
+const SERVER_HOSTNAME = env.SERVER_HOSTNAME || 'localhost';
 
 const SERVER = {
     hostname: SERVER_HOSTNAME,

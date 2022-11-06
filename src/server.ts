@@ -3,7 +3,8 @@ import bodyParser from 'body-parser';
 import express from 'express';
 import logging from './config/logging';
 import config from './config/config';
-import mainRoute from './routes/home';
+import mainRoute from './routes/HomeRoute';
+import ProductRoute from './routes/ProductRoute';
 
 const NAMESPACE = 'Server';
 const app = express();
@@ -31,9 +32,15 @@ app.use((req, res, next) => {
         return res.sendStatus(401);
     }
 });
-/** Routes */
+/** ROUTES */
+
+// Home
 app.use('/', mainRoute);
 app.use('/api', mainRoute);
+// Product
+app.use('/product', ProductRoute);
+
+/** END ROUTES */
 
 /** Error handling */
 app.use((req, res, next) => {
@@ -46,6 +53,9 @@ app.use((req, res, next) => {
 
     res.status(401).json({
         message: 'Not Authorized'
+    });
+    res.status(400).json({
+        message: 'Malformed data'
     });
 });
 

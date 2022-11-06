@@ -3,40 +3,52 @@ import bodyParser from 'body-parser';
 import express from 'express';
 import logging from './config/logging';
 import config from './config/config';
-import mainRoute from './routes/';
+import mainRoute from './routes/home';
 
 const NAMESPACE = 'Server';
-const router = express();
+const app = express();
 
 /** Parse the body of the request */
-router.use(bodyParser.urlencoded({ extended: true }));
-router.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 /** Rules of our API */
-router.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+app.use((req, res, next) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
 
-    if (req.method == 'OPTIONS') {
-        res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');
-        return res.status(200).json({});
+    if (token) {
+        res.header('Access-Control-Allow-Origin', '*');
+        res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+
+        if (req.method == 'OPTIONS') {
+            res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');
+            return res.status(200).json({});
+        }
+
+        next();
+    } else {
+        return res.sendStatus(401);
     }
-
-    next();
 });
 /** Routes */
-router.use('/', mainRoute);
-router.use('/api', mainRoute);
+app.use('/', mainRoute);
+app.use('/api', mainRoute);
 
 /** Error handling */
-router.use((req, res, next) => {
+app.use((req, res, next) => {
     const error = new Error('Route not found');
+    const notAuthorized = new Error('Not Authorized');
 
     res.status(404).json({
         message: error.message
     });
+
+    res.status(401).json({
+        message: 'Not Authorized'
+    });
 });
 
-const httpServer = http.createServer(router);
+const httpServer = http.createServer(app);
 
 httpServer.listen(config.server.port, () => logging.info(NAMESPACE, `Server is running ${config.server.hostname}:${config.server.port}`));

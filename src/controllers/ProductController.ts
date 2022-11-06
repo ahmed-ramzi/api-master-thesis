@@ -14,6 +14,11 @@ const createProduct = async (req: Request, res: Response, next: NextFunction) =>
             message: 'Product should not be array!'
         });
 
+    if (!Object.keys(data).length)
+        return res.status(404).json({
+            message: 'Body is empty!'
+        });
+
     await productsCollection
         .add(data)
         .then(() => {
@@ -37,6 +42,11 @@ const createBulkProducts = async (req: Request, res: Response, next: NextFunctio
     if (!Array.isArray(data))
         return res.status(404).json({
             message: 'Products must be in array form!'
+        });
+
+    if (!data.length)
+        return res.status(404).json({
+            message: 'Body array is empty!'
         });
 
     try {
@@ -66,7 +76,7 @@ const getAllProducts = async (req: Request, res: Response, next: NextFunction) =
             // @ts-ignore
             const tempDoc = [];
             products.forEach((doc) => {
-                tempDoc.push(doc.data());
+                tempDoc.push({ id: doc.id, ...doc.data() });
             });
             // @ts-ignore
             all_products = [...tempDoc];

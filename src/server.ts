@@ -35,17 +35,13 @@ app.use((req, res, next) => {
 /** ROUTES */
 
 // Home
-app.use('/', mainRoute);
-app.use('/api', mainRoute);
-// Product
-app.use('/product', ProductRoute);
+app.use('/api', mainRoute, ProductRoute);
 
 /** END ROUTES */
 
 /** Error handling */
 app.use((req, res, next) => {
     const error = new Error('Route not found');
-    const notAuthorized = new Error('Not Authorized');
 
     res.status(404).json({
         message: error.message

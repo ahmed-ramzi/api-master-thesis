@@ -10,12 +10,12 @@ const createProduct = async (req: Request, res: Response, next: NextFunction) =>
     const data = req.body;
 
     if (Array.isArray(data))
-        return res.status(404).json({
+        return res.status(422).json({
             message: 'Product should not be array!'
         });
 
     if (!Object.keys(data).length)
-        return res.status(404).json({
+        return res.status(422).json({
             message: 'Body is empty!'
         });
 
@@ -40,12 +40,12 @@ const createBulkProducts = async (req: Request, res: Response, next: NextFunctio
     const data = req.body;
 
     if (!Array.isArray(data))
-        return res.status(404).json({
+        return res.status(422).json({
             message: 'Products must be in array form!'
         });
 
     if (!data.length)
-        return res.status(404).json({
+        return res.status(422).json({
             message: 'Body array is empty!'
         });
 
@@ -82,7 +82,7 @@ const getAllProducts = async (req: Request, res: Response, next: NextFunction) =
             all_products = [...tempDoc];
         })
         .then(() => {
-            return res.status(200).json({
+            return res.status(201).json({
                 // @ts-ignore
                 products: [...all_products]
             });

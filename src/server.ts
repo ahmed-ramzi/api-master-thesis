@@ -33,11 +33,7 @@ app.use((req, res, next) => {
     }
 });
 /** ROUTES */
-
-// Home
 app.use('/api', mainRoute, ProductRoute);
-
-/** END ROUTES */
 
 /** Error handling */
 app.use((req, res, next) => {
